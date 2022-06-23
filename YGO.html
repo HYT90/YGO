@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yu-Gi-Oh</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+    <link type="text/css" rel="stylesheet" href="YGO.css">
+</head>
+<body>
+    <header>
+        <div class="search">
+            <div>
+                <input type="text" placeholder="請輸入名稱(英文)" value="baby dragon"/><button onClick="Search()">搜尋</button>
+
+            </div>    
+        </div>
+        <div class="nav">
+            <a href="#">牌組列表</a>
+        </div>
+    </header>
+
+    <section id="overview">
+        <div class="layout explorer"></div>
+        <div class="layout deck">牌組</div>
+    </section>
+
+    <section class="popup">
+        <div><i class="bi bi-x-lg close" onclick="ZoomOut()"></i></div>
+        <div class="card-info">
+            <div id="card-img">
+                <img src="">
+            </div>
+            <div id="card-description">
+                <h1 id="card-name">card name</h1>
+                <div id="card-ad">
+                    <span class="level"><img src="https://ygoprodeck.com/wp-content/uploads/2017/01/level.png" /><p></p></span>
+                    <span class="atkdef"></span>
+                </div>
+                <div id="card-desc">
+                    description
+                </div>                
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
+        let input = document.getElementsByTagName('input');
+        const cardExplorer = document.getElementsByClassName('explorer');
+
+        const levelicon = "https://ygoprodeck.com/wp-content/uploads/2017/01/level.png";
+
+        //TODO:API的response結果 寫一個Objlist存response的資料 可以用overview中的image id來找卡片的資訊
+        let cardInfo;
+
+        //遊戲王API url
+        const url = 'https://db.ygoprodeck.com/api/v7/cardinfo.php';
+
+        const Search = ()=>{
+            const searchName = input[0].value.trim();
+            console.log(searchName.length);
+            if(searchName === '' || searchName.length < 3){
+                alert('請輸入有效關鍵字');
+                return;
+            }
+            getCardImage(url + '?fname=' + searchName);
+        };
+
+        //更多卡片結果
+        let maxnumber = 0;
+        const cardspertime = 36;
+
+
+        //TODO 過濾器 種族 星 魔/陷 攻/防
+        async function getCardImage(URL) {
+            //刷新頁面
+            cardExplorer[0].innerHTML = "";
+            cardInfo = [];
+            maxnumber = 0;
+
+            let myObject = await fetch(URL);
+            console.log(myObject.status);
+            if(myObject.status !== 200) return;
+
+            let myText = await myObject.text();
+            const json = await JSON.parse(myText);
+            //TODO:json處理 cardInfo為已搜尋完的結果(全部)
+            cardInfo = json.data;
+            console.log(cardInfo);
+            let number = 0;
+
+            await cardInfo.forEach(card => {
+                //為預防效能降低 先取出部分數量結果(cardspertime)
+                if(number >= cardspertime){
+                    maxnumber = number;
+                    return;
+                }
+                cardExplorer[0].innerHTML += "<img width='10%' id = " + number + " name=" + number++ +" src=" + card.card_images[0].image_url + " onclick='ZoomIn(name)'>";
+            })
+
+            if(maxnumber >= 36){
+                cardExplorer[0].innerHTML += "<button id='more-result' onclick='MoreResult(maxnumber)'>顯示更多結果</button>";
+            }
+        }
+
+        //更多結果方法
+        const MoreResult = (number)=>{
+
+            $('#more-result').remove();
+            let checknumber = number+cardspertime;
+
+            for(number; number<cardInfo.length; number++){
+                if(number >= checknumber) break;
+                $("<img width='10%' id = " + number + " name=" + number +" src=" + cardInfo[number].card_images[0].image_url + " onclick='ZoomIn(name)'>").appendTo($('.explorer'));
+            }
+            maxnumber = number;
+            if(maxnumber < cardInfo.length){
+                cardExplorer[0].innerHTML += "<button id='more-result' onclick='MoreResult(maxnumber)'>顯示更多結果</button>";
+            }
+        };
+
+        //檢視卡牌
+        const ZoomIn = (id)=>{
+            const cardinfo = $('.popup').children('.card-info');
+
+            $('#card-img').children('img').prop('src', cardInfo[id].card_images[0].image_url);
+            $('#card-name').text(cardInfo[id].name);
+
+            if(cardInfo[id].level != null){
+                $('#card-ad').css('display', 'flex');
+                $('#card-ad').children('.level').css('display', 'flex');
+                $('#card-ad').children('.level').children('p').text(cardInfo[id].level);
+            }else if(cardInfo[id].type != "Spell Card" && cardInfo[id].type != "Trap Card"){
+                $('#card-ad').css('display', 'flex');
+                $('#card-ad').children('.level').css('display', 'none');
+            }else{
+                $('#card-ad').css('display', 'none');
+            }
+                
+            if(cardInfo[id].atk != null){
+                if(cardInfo[id].type == 'Link Monster'){
+                    $('#card-ad').children('.atkdef').text('');
+                    $('#card-ad').children('.atkdef').append("ATK/ "+ cardInfo[id].atk + "<strong id='link-type'>LINK-" + cardInfo[id].linkval + "</strong>");
+                }else{
+                    $('#card-ad').children('.atkdef').text('');
+                    $('#card-ad').children('.atkdef').append("ATK/"+ cardInfo[id].atk + "<span id='def'>DEF/" + cardInfo[id].def + "</span>");
+                }
+            }else{
+                $('#card-ad').children('.atkdef').text('');
+            }
+                
+            $('#card-desc').text(cardInfo[id].desc);
+
+            $('.popup').css('display','flex');
+        };
+
+        //關閉檢視
+        const ZoomOut = ()=>{
+            $('#link-type').remove();
+            $('#def').remove();
+            $('.popup').css('display','none');
+        }
+    </script>
+</body>
+</html>
