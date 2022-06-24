@@ -102,6 +102,8 @@ header div.search button{
     border: 2px solid;
     border-radius: 5px;
     padding: 5px;
+    display: flex;
+    justify-content: space-between;
 }
 .popup .card-info #card-description #card-ad{
     font-size: 20px;
@@ -160,11 +162,10 @@ header div.search button{
     padding: 8px;
     margin: 10px 0;
 }
-
 .popup .close{
-    position:absolute;
-    right: 10%;
-    top: 10%;
+    padding-bottom: 485px;
+}
+.popup .close .bi-x-lg{
     font-size: 30px;
 }
 

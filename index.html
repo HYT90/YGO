@@ -27,13 +27,12 @@
     </section>
 
     <section class="popup">
-        <div><i class="bi bi-x-lg close" onclick="ZoomOut()"></i></div>
         <div class="card-info">
             <div id="card-img">
                 <img src="">
             </div>
             <div id="card-description">
-                <h1 id="card-name">card name</h1>
+                <h1 id="card-name">card name <img id="attribute" src="https://ygoprodeck.com/pics/EARTH.jpg"></h1>
                 <div id="card-ad">
                     <span class="level"><img src="https://ygoprodeck.com/wp-content/uploads/2017/01/level.png" /><p></p></span>
                     <span class="atkdef"></span>
@@ -48,6 +47,7 @@
                 </div>                
             </div>
         </div>
+        <div class="close"><i class="bi bi-x-lg" onclick="ZoomOut()" title="關閉"></i></div>
     </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -118,7 +118,7 @@
 
             for(number; number<cardInfo.length; number++){
                 if(number >= checknumber) break;
-                $("<img width='10%' id = " + number + " name=" + number +" src=" + card.card_images[0].image_url_small + " onclick='ZoomIn(name)'>").appendTo($('.explorer'));
+                $("<img width='10%' id = " + number + " name=" + number +" src=" + cardInfo[number].card_images[0].image_url_small + " onclick='ZoomIn(name)'>").appendTo($('.explorer'));
             }
             maxnumber = number;
             if(maxnumber < cardInfo.length){
@@ -131,7 +131,11 @@
             const cardinfo = $('.popup').children('.card-info');
 
             $('#card-img').children('img').prop('src', cardInfo[id].card_images[0].image_url);
+
+            $('#attribute').remove();
             $('#card-name').text(cardInfo[id].name);
+            if(cardInfo[id].type != "Spell Card" && cardInfo[id].type != "Trap Card")
+                $('#card-name').append('<img id="attribute" src="https://ygoprodeck.com/pics/' + cardInfo[id].attribute + '.jpg">');
 
             if(cardInfo[id].level != null){
                 $('#card-ad').css('display', 'flex');
