@@ -38,8 +38,11 @@
                     <span class="level"><img src="https://ygoprodeck.com/wp-content/uploads/2017/01/level.png" /><p></p></span>
                     <span class="atkdef"></span>
                 </div>
+                <div id="card-type">
+
+                </div>
                 <div id="card-desc">
-                    description
+                    
                 </div>                
             </div>
         </div>
@@ -82,7 +85,7 @@
 
             let myObject = await fetch(URL);
             console.log(myObject.status);
-            if(myObject.status !== 200) return;
+            if(myObject.status != 200) return;
 
             let myText = await myObject.text();
             const json = await JSON.parse(myText);
@@ -150,8 +153,11 @@
             }else{
                 $('#card-ad').children('.atkdef').text('');
             }
+
+            $('#card-type').text(cardInfo[id].type + "/" + cardInfo[id].race);
                 
-            $('#card-desc').text(cardInfo[id].desc);
+            const descstr =  cardInfo[id].desc;
+            $('#card-desc').text(descstr);
 
             $('.popup').css('display','flex');
         };

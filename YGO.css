@@ -109,10 +109,21 @@ header div.search button{
     border: 2px solid;
     border-radius: 5px;
     padding: 8px;
-    margin: 5px 0;
+    margin: 10px 0;
     display: flex;
     justify-content:flex-start;
 }
+#card-type{
+    font-size: 20px;
+    height:10%;
+    border: 2px solid;
+    border-radius: 5px;
+    padding: 8px;
+    margin: 10px 0;
+    display: flex;
+    justify-content:flex-start;
+}
+
 .popup .card-info #card-description #card-ad .level{
     display: flex;
 }
@@ -139,6 +150,7 @@ header div.search button{
     border-radius: 5px;
     padding: 8px;
     overflow:scroll;
+    white-space: pre-line;
 }
 
 .popup .close{
