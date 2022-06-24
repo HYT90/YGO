@@ -42,7 +42,9 @@
 
                 </div>
                 <div id="card-desc">
-                    
+                </div>
+                <div id="archetype">
+
                 </div>                
             </div>
         </div>
@@ -100,7 +102,7 @@
                     maxnumber = number;
                     return;
                 }
-                cardExplorer[0].innerHTML += "<img width='10%' id = " + number + " name=" + number++ +" src=" + card.card_images[0].image_url + " onclick='ZoomIn(name)'>";
+                cardExplorer[0].innerHTML += "<img width='10%' id = " + number + " name=" + number++ +" src=" + card.card_images[0].image_url_small + " onclick='ZoomIn(name)'>";
             })
 
             if(maxnumber >= 36){
@@ -116,7 +118,7 @@
 
             for(number; number<cardInfo.length; number++){
                 if(number >= checknumber) break;
-                $("<img width='10%' id = " + number + " name=" + number +" src=" + cardInfo[number].card_images[0].image_url + " onclick='ZoomIn(name)'>").appendTo($('.explorer'));
+                $("<img width='10%' id = " + number + " name=" + number +" src=" + card.card_images[0].image_url_small + " onclick='ZoomIn(name)'>").appendTo($('.explorer'));
             }
             maxnumber = number;
             if(maxnumber < cardInfo.length){
@@ -155,9 +157,13 @@
             }
 
             $('#card-type').text(cardInfo[id].type + "/" + cardInfo[id].race);
-                
-            const descstr =  cardInfo[id].desc;
-            $('#card-desc').text(descstr);
+
+            $('#card-desc').text(cardInfo[id].desc);
+            
+            if(cardInfo[id].archetype != null)
+                $('#archetype').css('display', 'block').text("Archetype: " + cardInfo[id].archetype);
+            else
+                $('#archetype').css('display', 'none');
 
             $('.popup').css('display','flex');
         };

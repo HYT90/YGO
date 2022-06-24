@@ -145,12 +145,20 @@ header div.search button{
 
 .popup .card-info #card-description #card-desc{
     font-size: 20px;
-    height:50%;
+    height:60%;
     border: 2px solid;
     border-radius: 5px;
     padding: 8px;
     overflow:scroll;
     white-space: pre-line;
+}
+#archetype{
+    font-size: 20px;
+    height:10%;
+    border: 2px solid;
+    border-radius: 5px;
+    padding: 8px;
+    margin: 10px 0;
 }
 
 .popup .close{
