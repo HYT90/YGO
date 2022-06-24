@@ -26,15 +26,19 @@
         <div class="layout deck" style="display:none;">牌組</div>
     </section>
 
+    <sectiom id="check-more">
+        
+    </sectiom>
+
     <section class="popup">
         <div class="card-info">
             <div id="card-img">
-                <img src="">
+                <img id="zoomin-img" src="">
             </div>
             <div id="card-description">
                 <h1 id="card-name">card name <img id="attribute" src="https://ygoprodeck.com/pics/EARTH.jpg"></h1>
                 <div id="card-ad">
-                    <span class="level"><img src="https://ygoprodeck.com/wp-content/uploads/2017/01/level.png" /><p></p></span>
+                    <span class="level"><img style="max-height: 20px; margin-top: 5px;" src="https://ygoprodeck.com/wp-content/uploads/2017/01/level.png" /><p></p></span>
                     <span class="atkdef"></span>
                 </div>
                 <div id="card-type">
@@ -54,6 +58,7 @@
     <script type="text/javascript">
         let input = document.getElementsByTagName('input');
         const cardExplorer = document.getElementsByClassName('explorer');
+        const checkmore = document.getElementById('check-more');
 
         const levelicon = "https://ygoprodeck.com/wp-content/uploads/2017/01/level.png";
 
@@ -106,7 +111,7 @@
             })
 
             if(maxnumber >= 36){
-                cardExplorer[0].innerHTML += "<button id='more-result' onclick='MoreResult(maxnumber)'>顯示更多結果</button>";
+                checkmore.innerHTML = "<button id='more-result' onclick='MoreResult(maxnumber)'>顯示更多結果...</button>";
             }
         }
 
@@ -122,7 +127,7 @@
             }
             maxnumber = number;
             if(maxnumber < cardInfo.length){
-                cardExplorer[0].innerHTML += "<button id='more-result' onclick='MoreResult(maxnumber)'>顯示更多結果</button>";
+                checkmore.innerHTML = "<button id='more-result' onclick='MoreResult(maxnumber)'>顯示更多結果...</button>";
             }
         };
 
@@ -160,7 +165,7 @@
                 $('#card-ad').children('.atkdef').text('');
             }
 
-            $('#card-type').text(cardInfo[id].type + "/" + cardInfo[id].race);
+            $('#card-type').text(cardInfo[id].type + " / " + cardInfo[id].race);
 
             $('#card-desc').text(cardInfo[id].desc);
             
