@@ -10,7 +10,7 @@
 }
 
 body{
-  background: #1D212B;
+    background: #1D212B;
 }
 
 a{
@@ -52,7 +52,7 @@ header div.search button{
 }
 
 .explorer{
-    width: 80%;
+    width: 100%;
     display: flex;
     justify-content:flex-start;
     flex-wrap: wrap;
@@ -64,6 +64,8 @@ header div.search button{
 
 .layout img{
     margin: 10px 10px 0 0;
+    width: 10%;
+    min-width: 120px;
 }
 
 .popup{
@@ -88,17 +90,17 @@ header div.search button{
 .popup .card-info #card-img img{
     width: 413px;
     height: 602px;
-    margin: 70px 100px 0 0;
+    margin: 60px 0 0 50px;
 }
 
 .popup .card-info #card-description {
-    margin:auto;
-    width: 500px;
+    width: 400px;
     height: 520px;
+    margin: 0 50px 0 0;
 }
 
 .popup .card-info #card-description h1{
-    margin:0 0 25px 0;
+    margin:0 0px 25px 0;
     border: 2px solid;
     border-radius: 5px;
     padding: 5px;
@@ -164,6 +166,7 @@ header div.search button{
 }
 .popup .close{
     padding-bottom: 485px;
+    margin-right: 50px;
 }
 .popup .close .bi-x-lg{
     font-size: 30px;
@@ -176,4 +179,48 @@ header div.search button{
     cursor: pointer;
     margin: auto;
     margin-top: 20px;
+}
+#attribute{
+    max-height: 36px;
+}
+
+@media (max-width: 1000px) {
+    .explorer{
+        justify-content:center;
+    }
+
+    .popup {
+        top: 0px;
+    }
+    .popup .card-info {
+        width: 1000px;
+        height: 1200px;
+        padding-left: 100px;
+        flex-direction: column;
+    }
+    .popup .card-info #card-img{
+        display: flex;
+        justify-content:center;
+        align-items: center;
+    }
+    .popup .card-info #card-img img {
+        width: 65%;
+        height: auto;
+        margin: 0;
+        padding: 140px 0 25px 0;
+    }
+    .popup .card-info #card-description {
+        width: 100%;
+        height: 40%;
+        margin-bottom: 200px;
+        padding-top: 0;
+        margin-left: 100px;
+    }
+    .popup .close{
+        padding-bottom: 800px;
+        padding-right: 40px;
+    }
+    .popup .close .bi-x-lg{
+        font-size: 40px;
+    }
 }
