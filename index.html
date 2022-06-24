@@ -89,10 +89,14 @@
             cardExplorer[0].innerHTML = "";
             cardInfo = [];
             maxnumber = 0;
+            $('#more-result').remove();
 
             let myObject = await fetch(URL);
             console.log(myObject.status);
-            if(myObject.status != 200) return;
+            if(myObject.status != 200){
+                alert(myObject.status + " Bad Request");
+                return;
+            }
 
             let myText = await myObject.text();
             const json = await JSON.parse(myText);
