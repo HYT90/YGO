@@ -33,7 +33,7 @@
     <section class="popup">
         <div class="card-info">
             <div id="card-img">
-                <img id="zoomin-img" src="">
+                <img id="zoomin-img" src="https://ygoprodeck.com/pics/back_high.jpg">
             </div>
             <div id="card-description">
                 <h1 id="card-name">card name <img id="attribute" src="https://ygoprodeck.com/pics/EARTH.jpg"></h1>
@@ -84,8 +84,11 @@
 
 
         //TODO 過濾器 種族 星 魔/陷 攻/防
+        let done = false;
         async function getCardImage(URL) {
+            if(done) return;
             //刷新頁面
+            done = true;
             cardExplorer[0].innerHTML = "";
             cardInfo = [];
             maxnumber = 0;
@@ -95,6 +98,7 @@
             console.log(myObject.status);
             if(myObject.status != 200){
                 alert(myObject.status + " Bad Request");
+                done = false;
                 return;
             }
 
@@ -117,6 +121,7 @@
             if(maxnumber >= 36){
                 checkmore.innerHTML = "<button id='more-result' onclick='MoreResult(maxnumber)'>顯示更多結果...</button>";
             }
+            done = false;
         }
 
         //更多結果方法
@@ -183,6 +188,7 @@
 
         //關閉檢視
         const ZoomOut = ()=>{
+            $('#card-img').children('img').prop('src', 'https://ygoprodeck.com/pics/back_high.jpg');
             $('#link-type').remove();
             $('#def').remove();
             $('.popup').css('display','none');
