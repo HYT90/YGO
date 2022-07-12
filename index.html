@@ -1,198 +1,615 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Yu-Gi-Oh</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
-    <link type="text/css" rel="stylesheet" href="YGO.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"
+    />
+    <link type="text/css" rel="stylesheet" href="YGO.css" />
+  </head>
+  <body>
     <header>
-        <div class="search">
+      <div class="search">
+        <div style="display: flex">
+          <form>
+            <input
+              type="text"
+              placeholder="請輸入名稱(英文)"
+              value="baby dragon"
+            />
+          </form>
+          <button type="button" class="search-button" onClick="Search()">
+            搜尋
+          </button>
+          <button type="button" onClick="OpenTheFilterMenu()">條件搜尋</button>
+        </div>
+      </div>
+      <div id="section-vue" v-show="Open">
+        <form>
+          <div>
             <div>
-                <input type="text" placeholder="請輸入名稱(英文)" value="baby dragon"/><button onClick="Search()">搜尋</button>
+              <label for="type">請選擇卡片類型:</label>
+              <select
+                id="type"
+                name="type"
+                v-model="TypeSelected"
+                v-on:change="ClearFilter"
+              >
+                <option v-for="type, index of Types" v-bind:value="index">
+                  {{type}}
+                </option>
+              </select>
+            </div>
+          </div>
 
-            </div>    
-        </div>
-        <div class="nav">
-            <a href="#">牌組列表</a>
-        </div>
+          <div v-show="TypeSelected==1">
+            <div>
+              <label for="monster-type">請選擇怪獸卡類型:</label>
+              <select
+                id="monster-type"
+                name="monster-type"
+                v-model="SearchFilter.MonsterType"
+              >
+                <option
+                  v-for="monstertype of MonsterTypes"
+                  v-bind:value="monstertype"
+                >
+                  {{monstertype}}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label for="race">請選擇怪獸種族:</label>
+              <select id="race" name="race" v-model="SearchFilter.Race">
+                <option v-for="race of MonsterRaces" v-bind:value="race">
+                  {{race}}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label for="attribute">請選擇怪獸卡屬性:</label>
+              <select
+                id="attribute"
+                name="attribute"
+                v-model="SearchFilter.Attribute"
+              >
+                <option v-for="attri of Attributes" v-bind:value="attri">
+                  {{attri}}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label for="attack">攻擊力範圍:</label>
+              <input
+                id="attack"
+                type="number"
+                min="0"
+                v-model.number="ATK.min"
+                step="5"
+                @change="ATKminFormax"
+              />
+              ~
+              <input
+                type="number"
+                step="5"
+                min="0"
+                v-model.number="ATK.max"
+                v-on:change="ATKmaxFormin"
+              />
+            </div>
+            <div>
+              <label for="defense">防禦力範圍:</label>
+              <input
+                id="defense"
+                type="number"
+                min="0"
+                v-model.number="DEF.min"
+                step="5"
+                v-on:change="DEFminFormax"
+              />
+              ~
+              <input
+                type="number"
+                step="5"
+                min="0"
+                v-model.number="DEF.max"
+                v-on:change="DEFmaxFormin"
+              />
+            </div>
+          </div>
+
+          <div v-show="TypeSelected==2">
+            <div>
+              <label for="spell-race">請選擇魔法種類:</label>
+              <select
+                id="spell-race"
+                name="spell-race"
+                v-model="SearchFilter.Race"
+              >
+                <option v-for="race of SpellCardRaces" v-bind:value="race">
+                  {{race}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div v-show="TypeSelected==3">
+            <div>
+              <label for="trap-race">請選擇陷阱種類:</label>
+              <select
+                id="trap-race"
+                name="trap-race"
+                v-model="SearchFilter.Race"
+              >
+                <option v-for="race of TrapCardRaces" v-bind:value="race">
+                  {{race}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
     </header>
 
     <section id="overview">
-        <div class="layout explorer"></div>
-        <div class="layout deck" style="display:none;">牌組</div>
+      <div class="layout explorer"></div>
     </section>
 
-    <sectiom id="check-more">
-        
-    </sectiom>
+    <sectiom id="check-more"> </sectiom>
 
     <section class="popup">
-        <div class="card-info">
-            <div id="card-img">
-                <img id="zoomin-img" src="https://ygoprodeck.com/pics/back_high.jpg">
-            </div>
-            <div id="card-description">
-                <h1 id="card-name">card name <img id="attribute" src="https://ygoprodeck.com/pics/EARTH.jpg"></h1>
-                <div id="card-ad">
-                    <span class="level"><img style="max-height: 20px; margin-top: 5px;" src="https://ygoprodeck.com/wp-content/uploads/2017/01/level.png" /><p></p></span>
-                    <span class="atkdef"></span>
-                </div>
-                <div id="card-type">
-
-                </div>
-                <div id="card-desc">
-                </div>
-                <div id="archetype">
-
-                </div>                
-            </div>
+      <div class="card-info">
+        <div id="card-img">
+          <img
+            id="zoomin-img-back"
+            src="https://ygoprodeck.com/pics/back_high.jpg"
+            alt="圖片未載入"
+          />
+          <img id="zoomin-img" class="active" src="" alt="圖片未載入" />
         </div>
-        <div class="close"><i class="bi bi-x-lg" onclick="ZoomOut()" title="關閉"></i></div>
+        <div id="card-description">
+          <h1 id="card-name">
+            <span>card name</span>
+            <img id="attribute" alt="" src="" />
+          </h1>
+          <div id="card-ad">
+            <span class="level"
+              ><img
+                style="max-height: 20px; margin-top: 5px"
+                src="https://ygoprodeck.com/wp-content/uploads/2017/01/level.png" />
+              <p></p
+            ></span>
+            <span class="atkdef"></span>
+          </div>
+          <div id="card-type"></div>
+          <div id="card-desc"></div>
+          <div id="archetype"></div>
+        </div>
+      </div>
+      <div class="close">
+        <i class="bi bi-x-lg" onclick="ZoomOut()" title="關閉"></i>
+      </div>
     </section>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="text/javascript">
-        let input = document.getElementsByTagName('input');
-        const cardExplorer = document.getElementsByClassName('explorer');
-        const checkmore = document.getElementById('check-more');
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+      //宣告一個全域物件, vue里的data綁定這個物件
+      let data = {
+        Open: false,
+        default: "無限制",
+        ATK: {
+          min: 0,
+          max: 0,
+        },
+        DEF: {
+          min: 0,
+          max: 0,
+        },
+        //卡片類型 種類的Array, 添加 <select>標籤 選取
+        Types: ["無限制", "Monster Card", "Spell Card", "Trap Card"],
+        MonsterTypes: [
+          "無限制",
+          "Effect Monster",
+          "Flip Effect Monster",
+          "Flip Tuner Effect Monster",
+          "Gemini Monster",
+          "Normal Monster",
+          "Normal Tuner Monster",
+          "Pendulum Effect Monster",
+          "Pendulum Flip Effect Monster",
+          "Pendulum Normal Monster",
+          "Pendulum Tuner Effect Monster",
+          "Ritual Effect Monster",
+          "Ritual Monster",
+          "Spirit Monster",
+          "Toon Monster",
+          "Trap Card",
+          "Tuner Monster",
+          "Union Effect Monster",
+          "Fusion Monster",
+          "Link Monster",
+          "Pendulum Effect Fusion Monster",
+          "Synchro Monster",
+          "Synchro Pendulum Effect Monster",
+          "Synchro Tuner Monster",
+          "XYZ Monster",
+          "XYZ Pendulum Effect Monster",
+        ],
+        MonsterRaces: [
+          "無限制",
+          "Aqua",
+          "Beast",
+          "Beast-Warrior",
+          "Creator-God",
+          "Cyberse",
+          "Dinosaur",
+          "Divine-Beast",
+          "Dragon",
+          "Fairy",
+          "Fiend",
+          "Fish",
+          "Insect",
+          "Machine",
+          "Plant",
+          "Psychic",
+          "Pyro",
+          "Reptile",
+          "Rock",
+          "Sea Serpent",
+          "Spellcaster",
+          "Thunder",
+          "Warrior",
+          "Winged Beast",
+          "Wyrm",
+          "Zombie",
+        ],
+        SpellCardRaces: [
+          "無限制",
+          "Normal",
+          "Field",
+          "Equip",
+          "Continuous",
+          "Quick-Play",
+          "Ritual",
+        ],
+        TrapCardRaces: ["無限制", "Normal", "Continuous", "Counter"],
+        Attributes: [
+          "無限制",
+          "LIGHT",
+          "DARK",
+          "EARTH",
+          "WATER",
+          "FIRE",
+          "WIND",
+          "DIVINE",
+        ],
+        //選擇的Type, Type的值決定v-show. 0: 無限制, 1: 怪獸卡, 2: 魔法卡, 3:陷阱卡
+        TypeSelected: 0,
+        SearchFilter: {
+          MonsterType: "無限制",
+          Attribute: "無限制",
+          Race: "無限制",
+        },
+      };
 
-        const levelicon = "https://ygoprodeck.com/wp-content/uploads/2017/01/level.png";
+      const vm = new Vue({
+        el: "#section-vue",
+        data,
+        //computed catching 特性:會偵測computed函式中dependency data是否已改變 data發生改變刷新頁面(render)時 執行此computed(render), 反之computed中的dependency data未變動時 刷新頁面則不會執行此computed
+        computed: {
+          // ATKminFormax: function () {
+          //   this.ATK.max =
+          //     this.ATK.min > this.ATK.max ? this.ATK.min : this.ATK.max;
+          // },
+          // DEFminFormax: function () {
+          //   this.DEF.max =
+          //     this.DEF.min > this.DEF.max ? this.DEF.min : this.DEF.max;
+          // },
+        },
+        methods: {
+          ////////////////////////////
+          //使用者輸入欲查詢之範圍時, 輸入欄位的值(最大及最小)彼此須互相檢查是否有超出對方
+          ATKmaxFormin() {
+            this.ATK.min =
+              this.ATK.min > this.ATK.max ? this.ATK.max : this.ATK.min;
+          },
+          ATKminFormax() {
+            this.ATK.max =
+              this.ATK.min > this.ATK.max ? this.ATK.min : this.ATK.max;
+          },
+          DEFmaxFormin() {
+            this.DEF.min =
+              this.DEF.min > this.DEF.max ? this.DEF.max : this.DEF.min;
+          },
+          DEFminFormax() {
+            this.DEF.max =
+              this.DEF.min > this.DEF.max ? this.DEF.min : this.DEF.max;
+          },
+          ////////////////////////////
+          //清除搜尋條件
+          ClearFilter() {
+            this.SearchFilter = {
+              MonsterType: this.default,
+              Attribute: this.default,
+              Race: this.default,
+            };
+            this.ATK.min = 0;
+            this.ATK.max = 0;
+            this.DEF.min = 0;
+            this.DEF.max = 0;
+          },
+        },
+      });
 
-        //TODO:API的response結果 寫一個Objlist存response的資料 可以用overview中的image id來找卡片的資訊
-        let cardInfo;
+      ////////////////////////////////////////TODO:攻防數值條件搜尋處理
+      const ADFilterFunc = (infoList) => {
+        //最大ATK, DEF為0的話 代表最低也為0, 因此當作攻防沒有設限
+        if (data.ATK.max == 0 && data.DEF.max == 0) return infoList;
+        return infoList.filter((info) => {
+          return (
+            info.atk >= data.ATK.min &&
+            info.atk <= data.ATK.max &&
+            info.def >= data.DEF.min &&
+            info.def <= data.DEF.max
+          );
+        });
+        ///////////////////////////////////////
+        // if (data.ATK.max !== 0 && data.DEF.max !== 0) {
+        //   const result = [];
+        //   for (info of infoList) {
+        //     if (
+        //       info.atk >= data.ATK.min &&
+        //       info.atk <= data.ATK.max &&
+        //       info.def >= data.DEF.min &&
+        //       info.def <= data.DEF.max
+        //     ) {
+        //       result.splice(result.length, 0, info);
+        //     }
+        //   }
+        //   return result;
+        // }
+        // return infoList;
+      };
 
-        //遊戲王API url
-        const url = 'https://db.ygoprodeck.com/api/v7/cardinfo.php';
+      //開啟條件搜尋清單
+      const OpenTheFilterMenu = () => {
+        data.Open = !data.Open;
+      };
 
-        const Search = ()=>{
-            const searchName = input[0].value.trim();
-            console.log(searchName.length);
-            if(searchName === '' || searchName.length < 3){
-                alert('請輸入有效關鍵字');
-                return;
-            }
-            getCardImage(url + '?fname=' + searchName);
-        };
-
-        //更多卡片結果
-        let maxnumber = 0;
-        const cardspertime = 36;
-
-
-        //TODO 過濾器 種族 星 魔/陷 攻/防
-        let done = false;
-        async function getCardImage(URL) {
-            if(done) return;
-            //刷新頁面
-            done = true;
-            cardExplorer[0].innerHTML = "";
-            cardInfo = [];
-            maxnumber = 0;
-            $('#more-result').remove();
-
-            let myObject = await fetch(URL);
-            console.log(myObject.status);
-            if(myObject.status != 200){
-                alert(myObject.status + " Bad Request");
-                done = false;
-                return;
-            }
-
-            let myText = await myObject.text();
-            const json = await JSON.parse(myText);
-            //TODO:json處理 cardInfo為已搜尋完的結果(全部)
-            cardInfo = json.data;
-            console.log(cardInfo);
-            let number = 0;
-
-            await cardInfo.forEach(card => {
-                //為預防效能降低 先取出部分數量結果(cardspertime)
-                if(number >= cardspertime){
-                    maxnumber = number;
-                    return;
-                }
-                cardExplorer[0].innerHTML += "<img width='10%' id = " + number + " name=" + number++ +" src=" + card.card_images[0].image_url_small + " onclick='ZoomIn(name)'>";
-            })
-
-            if(maxnumber >= 36){
-                checkmore.innerHTML = "<button id='more-result' onclick='MoreResult(maxnumber)'>顯示更多結果...</button>";
-            }
-            done = false;
+      const FilterApply = () => {
+        let str = "";
+        let { MonsterType, Attribute, Race } = data.SearchFilter;
+        switch (data.TypeSelected) {
+          case 0:
+            break;
+          //怪獸卡
+          case 1:
+            if (MonsterType !== data.default) str += "&type=" + MonsterType;
+            if (Attribute !== data.default) str += "&attribute=" + Attribute;
+            if (Race !== data.default) str += "&race=" + Race;
+            break;
+          //魔陷
+          default:
+            MonsterType = data.Types[data.TypeSelected];
+            str += "&type=" + MonsterType;
+            if (Race !== data.default) str += "&race=" + Race;
         }
-
-        //更多結果方法
-        const MoreResult = (number)=>{
-
-            $('#more-result').remove();
-            let checknumber = number+cardspertime;
-
-            for(number; number<cardInfo.length; number++){
-                if(number >= checknumber) break;
-                $("<img width='10%' id = " + number + " name=" + number +" src=" + cardInfo[number].card_images[0].image_url_small + " onclick='ZoomIn(name)'>").appendTo($('.explorer'));
-            }
-            maxnumber = number;
-            if(maxnumber < cardInfo.length){
-                checkmore.innerHTML = "<button id='more-result' onclick='MoreResult(maxnumber)'>顯示更多結果...</button>";
-            }
-        };
-
-        //檢視卡牌
-        const ZoomIn = (id)=>{
-            const cardinfo = $('.popup').children('.card-info');
-
-            $('#card-img').children('img').prop('src', cardInfo[id].card_images[0].image_url);
-
-            $('#attribute').remove();
-            $('#card-name').text(cardInfo[id].name);
-            if(cardInfo[id].type != "Spell Card" && cardInfo[id].type != "Trap Card")
-                $('#card-name').append('<img id="attribute" src="https://ygoprodeck.com/pics/' + cardInfo[id].attribute + '.jpg">');
-
-            if(cardInfo[id].level != null){
-                $('#card-ad').css('display', 'flex');
-                $('#card-ad').children('.level').css('display', 'flex');
-                $('#card-ad').children('.level').children('p').text(cardInfo[id].level);
-            }else if(cardInfo[id].type != "Spell Card" && cardInfo[id].type != "Trap Card"){
-                $('#card-ad').css('display', 'flex');
-                $('#card-ad').children('.level').css('display', 'none');
-            }else{
-                $('#card-ad').css('display', 'none');
-            }
-                
-            if(cardInfo[id].atk != null){
-                if(cardInfo[id].type == 'Link Monster'){
-                    $('#card-ad').children('.atkdef').text('');
-                    $('#card-ad').children('.atkdef').append("ATK/ "+ cardInfo[id].atk + "<strong id='link-type'>LINK-" + cardInfo[id].linkval + "</strong>");
-                }else{
-                    $('#card-ad').children('.atkdef').text('');
-                    $('#card-ad').children('.atkdef').append("ATK/"+ cardInfo[id].atk + "<span id='def'>DEF/" + cardInfo[id].def + "</span>");
-                }
-            }else{
-                $('#card-ad').children('.atkdef').text('');
-            }
-
-            $('#card-type').text(cardInfo[id].type + " / " + cardInfo[id].race);
-
-            $('#card-desc').text(cardInfo[id].desc);
-            
-            if(cardInfo[id].archetype != null)
-                $('#archetype').css('display', 'block').text("Archetype: " + cardInfo[id].archetype);
-            else
-                $('#archetype').css('display', 'none');
-
-            $('.popup').css('display','flex');
-        };
-
-        //關閉檢視
-        const ZoomOut = ()=>{
-            $('#card-img').children('img').prop('src', 'https://ygoprodeck.com/pics/back_high.jpg');
-            $('#link-type').remove();
-            $('#def').remove();
-            $('.popup').css('display','none');
-        }
+        return str;
+      };
     </script>
-</body>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+      integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script type="text/javascript">
+      let input = document.getElementsByTagName("input");
+      const cardExplorer = document.getElementsByClassName("explorer");
+      const checkmore = document.getElementById("check-more");
+
+      const levelicon =
+        "https://ygoprodeck.com/wp-content/uploads/2017/01/level.png";
+
+      //TODO:API的response結果 寫一個Objlist存response的資料 可以用#overview中的image id來找卡片的資訊
+      let cardInfo = [];
+
+      //遊戲王API url
+      const url = "https://db.ygoprodeck.com/api/v7/cardinfo.php";
+
+      const Search = () => {
+        const searchName = input[0].value.trim();
+        if (searchName === "" || searchName.length < 3) {
+          alert("請輸入有效關鍵字");
+          return;
+        }
+        let filterApply = FilterApply();
+        getCardImage(url + "?fname=" + searchName + filterApply);
+      };
+
+      //更多卡片結果
+      let maxnumber = 0;
+      const cardspertime = 36;
+
+      //TODO 過濾器 種族 星 魔/陷 攻/防
+      let done = false;
+      async function getCardImage(URL) {
+        if (done) return;
+        //刷新頁面
+        done = true;
+        cardExplorer[0].innerHTML = "";
+        cardInfo = [];
+        maxnumber = 0;
+        $("#more-result").remove();
+
+        let myObject = await fetch(URL);
+        if (myObject.status === 400) {
+          alert(myObject.status + " Bad Request.\n沒有符合條件的結果");
+          done = false;
+          return;
+        }
+
+        let myText = await myObject.text();
+        const json = await JSON.parse(myText);
+        //TODO:json處理 cardInfo為已搜尋完的結果(全部)
+        TMPcardInfo = json.data;
+        console.log(TMPcardInfo);
+
+        ////////////////////////////////////////////TODO: 攻防數值條件處理
+        cardInfo = ADFilterFunc(TMPcardInfo);
+        console.log(cardInfo);
+        if (cardInfo.length == 0) {
+          done = false;
+          alert("沒有符合條件的結果");
+          return;
+        }
+
+        let number = 0;
+
+        await cardInfo.forEach((card) => {
+          //為預防效能降低 先取出部分數量結果(cardspertime)
+          if (number >= cardspertime) {
+            maxnumber = number;
+            return;
+          }
+          cardExplorer[0].innerHTML +=
+            "<img width='10%' id = " +
+            number +
+            " name=" +
+            number++ +
+            " src=" +
+            card.card_images[0].image_url_small +
+            " onclick='ZoomIn(name)'>";
+        });
+
+        if (maxnumber >= cardspertime) {
+          checkmore.innerHTML =
+            "<button id='more-result' onclick='MoreResult(maxnumber)'>顯示更多結果...</button>";
+        }
+        done = false;
+      }
+
+      //更多結果方法
+      const MoreResult = (number) => {
+        $("#more-result").remove();
+        let checknumber = number + cardspertime;
+
+        for (number; number < cardInfo.length; number++) {
+          if (number >= checknumber) break;
+          $(
+            "<img width='10%' id = " +
+              number +
+              " name=" +
+              number +
+              " src=" +
+              cardInfo[number].card_images[0].image_url_small +
+              " onclick='ZoomIn(name)'>"
+          ).appendTo($(".explorer"));
+        }
+        maxnumber = number;
+        if (maxnumber < cardInfo.length) {
+          checkmore.innerHTML =
+            "<button id='more-result' onclick='MoreResult(maxnumber)'>顯示更多結果...</button>";
+        }
+      };
+
+      //檢視卡牌
+      const ZoomIn = (id) => {
+        const cardinfo = $(".popup").children(".card-info");
+
+        $("#card-img")
+          .children("#zoomin-img")
+          .prop("src", cardInfo[id].card_images[0].image_url);
+
+        document.getElementById("zoomin-img").onload = function () {
+          document.getElementById("zoomin-img").classList.remove("active");
+          document.getElementById("zoomin-img-back").classList.add("active");
+        };
+
+        $("#card-name").children("span").text(cardInfo[id].name);
+        if (
+          cardInfo[id].type != "Spell Card" &&
+          cardInfo[id].type != "Trap Card"
+        )
+          $("#attribute").prop(
+            "src",
+            "https://ygoprodeck.com/pics/" + cardInfo[id].attribute + ".jpg"
+          );
+        else $("#attribute").prop("src", "");
+
+        if (cardInfo[id].level != null) {
+          $("#card-ad").css("display", "flex");
+          $("#card-ad").children(".level").css("display", "flex");
+          $("#card-ad")
+            .children(".level")
+            .children("p")
+            .text(cardInfo[id].level);
+        } else if (
+          cardInfo[id].type != "Spell Card" &&
+          cardInfo[id].type != "Trap Card"
+        ) {
+          $("#card-ad").css("display", "flex");
+          $("#card-ad").children(".level").css("display", "none");
+        } else {
+          $("#card-ad").css("display", "none");
+        }
+
+        if (cardInfo[id].atk != null) {
+          if (cardInfo[id].type == "Link Monster") {
+            $("#card-ad").children(".atkdef").text("");
+            $("#card-ad")
+              .children(".atkdef")
+              .append(
+                "ATK/ " +
+                  cardInfo[id].atk +
+                  "<strong id='link-type'>LINK-" +
+                  cardInfo[id].linkval +
+                  "</strong>"
+              );
+          } else {
+            $("#card-ad").children(".atkdef").text("");
+            $("#card-ad")
+              .children(".atkdef")
+              .append(
+                "ATK/" +
+                  cardInfo[id].atk +
+                  "<span id='def'>DEF/" +
+                  cardInfo[id].def +
+                  "</span>"
+              );
+          }
+        } else {
+          $("#card-ad").children(".atkdef").text("");
+        }
+
+        $("#card-type").text(cardInfo[id].type + " / " + cardInfo[id].race);
+
+        $("#card-desc").text(cardInfo[id].desc);
+
+        if (cardInfo[id].archetype != null)
+          $("#archetype")
+            .css("display", "block")
+            .text("Archetype: " + cardInfo[id].archetype);
+        else $("#archetype").css("display", "none");
+
+        $(".popup").css("display", "flex");
+      };
+
+      //關閉檢視
+      const ZoomOut = () => {
+        $("#zoomin-img-back").prop("class", "");
+        $("#zoomin-img").prop("class", "active");
+        $("#link-type").remove();
+        $("#def").remove();
+        $(".popup").css("display", "none");
+      };
+    </script>
+  </body>
 </html>

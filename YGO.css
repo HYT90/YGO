@@ -1,232 +1,263 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
-*{
+* {
   margin: 0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:"Poppins", sans-serif;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
   color: #fff;
-  word-wrap:break-word;
+  word-wrap: break-word;
 }
-h1{
-    font-size: 20px;
-}
-
-body{
-    background: #1D212B;
+h1 {
+  font-size: 20px;
 }
 
-a{
-    text-decoration: none;
+body {
+  background: #1d212b;
 }
 
-header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #25244f;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
-    padding: 20px 80px;
-    z-index: 999;
-    position: sticky;
-    top: 0;
-    left: 0;
+a {
+  text-decoration: none;
 }
 
-header div.search{
-    display: flex;
+header {
+  background: #25244f;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+  padding: 15px 80px;
+  z-index: 999;
+  position: sticky;
+  top: 0;
+  left: 0;
 }
 
-header div.search a{
-    margin-right: 20px;
-}
-header div.search input{
-    border-radius: 3px;
-    color: #1D212B;
-}
-header div.search button{
-    padding: 0 5px;
-    color: #1D212B;
+header div.search {
+  display: flex;
 }
 
-#overview{
-    display: flex;
-    justify-content:flex-start;
+header div.search input {
+  margin-bottom: 3px;
+  border-radius: 3px;
+  color: #1d212b;
 }
 
-.explorer{
-    width: 100%;
-    display: flex;
-    justify-content:center;
-    flex-wrap: wrap;
+header div.search div {
+  align-items: center;
+  padding-bottom: 2px;
+  margin-left: 10px;
 }
 
-.layout{
-    flex-wrap: wrap;
+header div.search div button {
+  margin: 4px 0 7px 0;
+  padding: 0 5px;
+  color: #1d212b;
 }
 
-.layout img{
-    margin: 10px 10px 0 0;
-    width: 10%;
-    min-width: 150px;
+header #section-vue form div {
+  display: block;
+}
+header #section-vue form div div {
+  margin: 10px;
 }
 
-.popup{
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.85);
-    position: fixed;
-    top: 0;
-    display: none;
-    justify-content: center;
-    align-items: center;
+header #section-vue form div input {
+  margin: 0;
+  color: #1d212b;
+}
+header #section-vue form input,
+header #section-vue form select,
+header #section-vue form select option {
+  margin-right: 20px;
+  color: #1d212b;
 }
 
-.popup .card-info{
-    width: 1100px;
-    height: 700px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+#overview {
+  display: flex;
+  justify-content: flex-start;
 }
 
-.popup .card-info #card-img img{
-    width: 413px;
-    height: 602px;
-    margin: 60px 0 0 50px;
+.explorer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.layout {
+  flex-wrap: wrap;
+}
+
+.layout img {
+  margin: 10px 10px 0 0;
+  width: 10%;
+  min-width: 150px;
+}
+
+.popup {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  position: fixed;
+  top: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup .card-info {
+  width: 1100px;
+  height: 700px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup .card-info #card-img img {
+  width: 413px;
+  height: 602px;
+  margin: 60px 0 0 50px;
 }
 
 .popup .card-info #card-description {
-    width: 50%;
-    height: 520px;
-    margin: 0 20px 25px 0;
+  width: 50%;
+  height: 520px;
+  margin: 0 20px 25px 0;
 }
 
-.popup .card-info #card-description h1{
-    margin:0 0px 25px 0;
-    border: 2px solid;
-    border-radius: 5px;
-    padding: 5px;
-    display: flex;
-    justify-content: space-between;
+.popup .card-info #card-description h1 {
+  margin: 0 0px 25px 0;
+  border: 2px solid;
+  border-radius: 5px;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
 }
-.popup .card-info #card-description #card-ad{
-    font-size: 20px;
-    height:10%;
-    border: 2px solid;
-    border-radius: 5px;
-    padding: 8px;
-    margin: 10px 0;
-    display: flex;
-    justify-content:flex-start;
+.popup .card-info #card-description #card-ad {
+  font-size: 20px;
+  height: 10%;
+  border: 2px solid;
+  border-radius: 5px;
+  padding: 8px;
+  margin: 10px 0;
+  display: flex;
+  justify-content: flex-start;
 }
-#card-type{
-    font-size: 20px;
-    height:10%;
-    border: 2px solid;
-    border-radius: 5px;
-    padding: 8px;
-    margin: 10px 0;
-    display: flex;
-    justify-content:flex-start;
-}
-
-.popup .card-info #card-description #card-ad .level{
-    display: flex;
-}
-#zoomin-img{
-    width: 20px;
-    height: 20px;
-    margin-top: 5px;
-}
-.popup .card-info #card-description #card-ad .level p{
-    margin-left: 8px;
-    margin-right: 20px;
-}
-.popup .card-info #card-description #card-ad .atkdef strong{
-    margin-left: 20px;
-}
-#def{
-    margin-left: 20px;
+#card-type {
+  font-size: 20px;
+  height: 10%;
+  border: 2px solid;
+  border-radius: 5px;
+  padding: 8px;
+  margin: 10px 0;
+  display: flex;
+  justify-content: flex-start;
 }
 
-.popup .card-info #card-description #card-desc{
-    font-size: 20px;
-    height:60%;
-    border: 2px solid;
-    border-radius: 5px;
-    padding: 8px;
-    overflow:scroll;
-    white-space: pre-line;
-}
-#archetype{
-    font-size: 20px;
-    height:10%;
-    border: 2px solid;
-    border-radius: 5px;
-    padding: 8px;
-    margin: 10px 0;
-}
-.popup .close{
-    padding-bottom: 485px;
-    margin-right: 50px;
-}
-.popup .close .bi-x-lg{
-    font-size: 30px;
+.popup .card-info #card-description #card-ad .level {
+  display: flex;
 }
 
-#check-more{
-    display:flex;
-    justify-content: center;
+.popup .card-info #card-img .active {
+  display: none;
 }
-#more-result{
-    background-color:#1D212B;
-    border: none;
-    cursor: pointer;
-    margin: 25px 0 25px 0;
+#zoomin-img {
+  width: 20px;
+  height: 20px;
+  margin-top: 5px;
 }
-#attribute{
-    max-height: 36px;
+#zoomin-img-back {
+  width: 20px;
+  height: 20px;
+  margin-top: 5px;
+}
+
+.popup .card-info #card-description #card-ad .level p {
+  margin-left: 8px;
+  margin-right: 20px;
+}
+.popup .card-info #card-description #card-ad .atkdef strong {
+  margin-left: 20px;
+}
+#def {
+  margin-left: 20px;
+}
+
+.popup .card-info #card-description #card-desc {
+  font-size: 20px;
+  height: 60%;
+  border: 2px solid;
+  border-radius: 5px;
+  padding: 8px;
+  overflow-y: scroll;
+  white-space: pre-line;
+}
+#archetype {
+  font-size: 20px;
+  height: 10%;
+  border: 2px solid;
+  border-radius: 5px;
+  padding: 8px;
+  margin: 10px 0;
+}
+.popup .close {
+  padding-bottom: 485px;
+  margin-right: 50px;
+}
+.popup .close .bi-x-lg {
+  font-size: 30px;
+}
+
+#check-more {
+  display: flex;
+  justify-content: center;
+}
+#more-result {
+  background-color: #1d212b;
+  border: none;
+  cursor: pointer;
+  margin: 25px 0 25px 0;
+}
+#attribute {
+  max-height: 36px;
 }
 
 @media (max-width: 1000px) {
-    .explorer{
-        justify-content:center;
-    }
+  .explorer {
+    justify-content: center;
+  }
 
-    .popup {
-        top: 0px;
-    }
-    .popup .card-info {
-        width: 1000px;
-        height: 1200px;
-        padding-left: 100px;
-        flex-direction: column;
-    }
-    .popup .card-info #card-img{
-        display: flex;
-        justify-content:center;
-        align-items: center;
-    }
-    .popup .card-info #card-img img {
-        width: 60%;
-        height: auto;
-        margin-left: 40px;
-        padding: 100px 0 25px 0;
-    }
-    .popup .card-info #card-description {
-        width: 100%;
-        height: 40%;
-        margin-bottom: 200px;
-        padding-top: 0;
-        margin-left: 80px;
-        margin-right: 40px;
-    }
-    .popup .close{
-        padding-bottom: 800px;
-        padding-right: 40px;
-    }
-    .popup .close .bi-x-lg{
-        font-size: 40px;
-    }
+  .popup {
+    top: 0px;
+  }
+  .popup .card-info {
+    width: 1000px;
+    height: 1200px;
+    padding-left: 100px;
+    flex-direction: column;
+  }
+  .popup .card-info #card-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .popup .card-info #card-img img {
+    width: 60%;
+    height: auto;
+    margin-left: 40px;
+    padding: 100px 0 25px 0;
+  }
+  .popup .card-info #card-description {
+    width: 100%;
+    height: 40%;
+    margin-bottom: 200px;
+    padding-top: 0;
+    margin-left: 80px;
+    margin-right: 40px;
+  }
+  .popup .close {
+    padding-bottom: 800px;
+    padding-right: 40px;
+  }
+  .popup .close .bi-x-lg {
+    font-size: 40px;
+  }
 }
