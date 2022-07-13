@@ -56,7 +56,7 @@ header div.search div button {
   background: #25244f;
   padding: 2px 80px;
   z-index: 999;
-  position: absolute;
+  position: fixed;
   width: 100%;
 }
 
