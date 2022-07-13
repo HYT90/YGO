@@ -20,14 +20,18 @@
               type="text"
               placeholder="請輸入名稱(英文)"
               value="baby dragon"
+              onkeydown="KeySearch(event)"
             />
           </form>
-          <button type="button" class="search-button" onClick="Search()">
+          <button type="button" class="search-button" onClick="Search(event)">
             搜尋
           </button>
           <button type="button" onClick="OpenTheFilterMenu()">條件搜尋</button>
         </div>
       </div>
+    </header>
+
+    <section>
       <div id="section-vue" v-show="Open">
         <form>
           <div>
@@ -155,8 +159,11 @@
             </div>
           </div>
         </form>
+        <button type="button" v-on:click="CloseAndClearFilter()">
+          關閉條件搜尋
+        </button>
       </div>
-    </header>
+    </section>
 
     <section id="overview">
       <div class="layout explorer"></div>
@@ -203,7 +210,7 @@
       //宣告一個全域物件, vue里的data綁定這個物件
       let data = {
         Open: false,
-        default: "無限制",
+        default: null,
         ATK: {
           min: 0,
           max: 0,
@@ -213,9 +220,9 @@
           max: 0,
         },
         //卡片類型 種類的Array, 添加 <select>標籤 選取
-        Types: ["無限制", "Monster Card", "Spell Card", "Trap Card"],
+        Types: [null, "Monster Card", "Spell Card", "Trap Card"],
         MonsterTypes: [
-          "無限制",
+          null,
           "Effect Monster",
           "Flip Effect Monster",
           "Flip Tuner Effect Monster",
@@ -243,7 +250,7 @@
           "XYZ Pendulum Effect Monster",
         ],
         MonsterRaces: [
-          "無限制",
+          null,
           "Aqua",
           "Beast",
           "Beast-Warrior",
@@ -271,7 +278,7 @@
           "Zombie",
         ],
         SpellCardRaces: [
-          "無限制",
+          null,
           "Normal",
           "Field",
           "Equip",
@@ -279,9 +286,9 @@
           "Quick-Play",
           "Ritual",
         ],
-        TrapCardRaces: ["無限制", "Normal", "Continuous", "Counter"],
+        TrapCardRaces: [null, "Normal", "Continuous", "Counter"],
         Attributes: [
-          "無限制",
+          null,
           "LIGHT",
           "DARK",
           "EARTH",
@@ -293,9 +300,9 @@
         //選擇的Type, Type的值決定v-show. 0: 無限制, 1: 怪獸卡, 2: 魔法卡, 3:陷阱卡
         TypeSelected: 0,
         SearchFilter: {
-          MonsterType: "無限制",
-          Attribute: "無限制",
-          Race: "無限制",
+          MonsterType: null,
+          Attribute: null,
+          Race: null,
         },
       };
 
@@ -334,7 +341,7 @@
           },
           ////////////////////////////
           //清除搜尋條件
-          ClearFilter() {
+          ClearFilter(event) {
             this.SearchFilter = {
               MonsterType: this.default,
               Attribute: this.default,
@@ -345,6 +352,10 @@
             this.DEF.min = 0;
             this.DEF.max = 0;
           },
+          CloseAndClearFilter(event) {
+            OpenTheFilterMenu();
+            this.ClearFilter(event);
+          },
         },
       });
 
@@ -353,12 +364,14 @@
         //最大ATK, DEF為0的話 代表最低也為0, 因此當作攻防沒有設限
         if (data.ATK.max == 0 && data.DEF.max == 0) return infoList;
         return infoList.filter((info) => {
-          return (
-            info.atk >= data.ATK.min &&
-            info.atk <= data.ATK.max &&
-            info.def >= data.DEF.min &&
-            info.def <= data.DEF.max
-          );
+          if (info.type !== "Link Monster")
+            return (
+              info.atk >= data.ATK.min &&
+              info.atk <= data.ATK.max &&
+              info.def >= data.DEF.min &&
+              info.def <= data.DEF.max
+            );
+          else return info.atk >= data.ATK.min && info.atk <= data.ATK.max;
         });
         ///////////////////////////////////////
         // if (data.ATK.max !== 0 && data.DEF.max !== 0) {
@@ -424,7 +437,16 @@
       //遊戲王API url
       const url = "https://db.ygoprodeck.com/api/v7/cardinfo.php";
 
-      const Search = () => {
+      const KeySearch = (event) => {
+        console.log(event.keyCode);
+        //當onkeydown觸發時, event先判斷輸入的鍵是否為Enter鍵
+        //Enter預設會觸發submit(轉址到form標籤裡的action頁面), 所以需要先讓event執行preventDefault()擋掉submit預設的動作
+        if (event.keyCode !== null && event.keyCode !== 13) return;
+        event.preventDefault();
+        Search(event);
+      };
+
+      const Search = (event) => {
         const searchName = input[0].value.trim();
         if (searchName === "" || searchName.length < 3) {
           alert("請輸入有效關鍵字");
@@ -445,7 +467,7 @@
         //刷新頁面
         done = true;
         cardExplorer[0].innerHTML = "";
-        cardInfo = [];
+        cardInfo.splice(0, cardInfo.length);
         maxnumber = 0;
         $("#more-result").remove();
 

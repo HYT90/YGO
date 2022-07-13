@@ -52,20 +52,32 @@ header div.search div button {
   color: #1d212b;
 }
 
-header #section-vue form div {
-  display: block;
-}
-header #section-vue form div div {
-  margin: 10px;
+#section-vue {
+  background: #25244f;
+  padding: 2px 80px;
+  z-index: 999;
+  position: absolute;
+  width: 100%;
 }
 
-header #section-vue form div input {
+#section-vue form div {
+  display: block;
+}
+#section-vue form div div {
+  margin: 10px;
+}
+#section-vue button {
+  margin: 10px;
+  color: #1d212b;
+}
+
+#section-vue form div input {
   margin: 0;
   color: #1d212b;
 }
-header #section-vue form input,
-header #section-vue form select,
-header #section-vue form select option {
+#section-vue form input,
+#section-vue form select,
+#section-vue form select option {
   margin-right: 20px;
   color: #1d212b;
 }
@@ -101,6 +113,7 @@ header #section-vue form select option {
   display: none;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .popup .card-info {
