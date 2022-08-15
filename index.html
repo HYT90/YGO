@@ -14,7 +14,7 @@
   <body>
     <header>
       <div class="search">
-        <div style="display: flex">
+        <div>
           <form>
             <input
               type="text"
@@ -32,7 +32,7 @@
     </header>
 
     <section>
-      <div id="section-vue" v-show="Open">
+      <div id="section-vue" v-show="OpenFilter">
         <form>
           <div>
             <div>
@@ -209,7 +209,7 @@
     <script>
       //宣告一個全域物件, vue里的data綁定這個物件
       let data = {
-        Open: false,
+        OpenFilter: false,
         default: null,
         ATK: {
           min: 0,
@@ -297,7 +297,7 @@
           "WIND",
           "DIVINE",
         ],
-        //選擇的Type, Type的值決定v-show. 0: 無限制, 1: 怪獸卡, 2: 魔法卡, 3:陷阱卡
+        //選擇的CardType, Type的值決定v-show. 0: 無限制, 1: 怪獸卡, 2: 魔法卡, 3:陷阱卡
         TypeSelected: 0,
         SearchFilter: {
           MonsterType: null,
@@ -393,7 +393,7 @@
 
       //開啟條件搜尋清單
       const OpenTheFilterMenu = () => {
-        data.Open = !data.Open;
+        data.OpenFilter = !data.OpenFilter;
       };
 
       const FilterApply = () => {
@@ -450,7 +450,7 @@
         const searchName = input[0].value.trim();
         const filterApply = FilterApply();
         if (searchName === "") {
-          alert("Please enter a search name");
+          alert("This should be nonempty");
           return;
         }
         getCardImage(url + "?fname=" + searchName + filterApply);
@@ -518,7 +518,7 @@
         done = false;
       }
 
-      //更多結果方法
+      //顯示更多結果的處理方法
       const MoreResult = (number) => {
         $("#more-result").remove();
         let checknumber = number + cardspertime;
@@ -542,7 +542,7 @@
         }
       };
 
-      //檢視卡牌
+      //popup檢視卡牌
       const ZoomIn = (id) => {
         const cardinfo = $(".popup").children(".card-info");
 
@@ -624,7 +624,7 @@
         $(".popup").css("display", "flex");
       };
 
-      //關閉檢視
+      //關閉popup檢視
       const ZoomOut = () => {
         $("#zoomin-img-back").prop("class", "");
         $("#zoomin-img").prop("class", "active");

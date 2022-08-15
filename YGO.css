@@ -30,10 +30,6 @@ header {
   left: 0;
 }
 
-header div.search {
-  display: flex;
-}
-
 header div.search input {
   margin-bottom: 3px;
   border-radius: 3px;
@@ -41,6 +37,7 @@ header div.search input {
 }
 
 header div.search div {
+  display: flex;
   align-items: center;
   padding-bottom: 2px;
   margin-left: 10px;
@@ -67,8 +64,11 @@ header div.search div button {
   margin: 10px;
 }
 #section-vue button {
+  border: none;
   margin: 10px;
-  color: #1d212b;
+  background: #25244f;
+  color: #fff;
+  cursor: pointer;
 }
 
 #section-vue form div input {
@@ -233,7 +233,7 @@ header div.search div button {
   max-height: 36px;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 950px) {
   .explorer {
     justify-content: center;
   }
@@ -272,5 +272,23 @@ header div.search div button {
   }
   .popup .close .bi-x-lg {
     font-size: 40px;
+  }
+}
+
+@media (max-width: 450px) {
+  header {
+    padding: 20px 20px;
+  }
+  header div.search div input {
+    font-size: 15px;
+  }
+  header div.search div button {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  header div.search div {
+    display: block;
   }
 }
