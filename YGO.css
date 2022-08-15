@@ -275,7 +275,7 @@ header div.search div button {
   }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 550px) {
   * {
     font-size: 15px;
   }
