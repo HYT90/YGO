@@ -184,7 +184,11 @@
         <div id="card-description">
           <h1 id="card-name">
             <span>card name</span>
-            <img id="attribute" alt="" src="" />
+            <img
+              id="card-attribute"
+              alt=""
+              src="https://images.ygoprodeck.com/images/cards/WIND.jpg"
+            />
           </h1>
           <div id="card-ad">
             <span class="level"
@@ -559,12 +563,13 @@
         if (
           cardInfo[id].type != "Spell Card" &&
           cardInfo[id].type != "Trap Card"
-        )
-          $("#attribute").prop(
-            "src",
-            "https://ygoprodeck.com/pics/" + cardInfo[id].attribute + ".jpg"
-          );
-        else $("#attribute").prop("src", "");
+        ) {
+          document.getElementById(
+            "card-attribute"
+          ).src = `https://images.ygoprodeck.com/images/cards/${cardInfo[id].attribute}.jpg`;
+        } else {
+          $("#card-attribute").prop("src", "");
+        }
 
         if (cardInfo[id].level != null) {
           $("#card-ad").css("display", "flex");
