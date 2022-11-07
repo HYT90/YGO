@@ -564,6 +564,7 @@
 
       //popup檢視卡牌
       const ZoomIn = (id) => {
+        document.body.style.overflow = "hidden";
         const cardinfo = $(".popup").children(".card-info");
 
         $("#card-img")
@@ -647,6 +648,7 @@
 
       //關閉popup檢視
       const ZoomOut = () => {
+        document.body.style.overflow = "auto";
         $("#zoomin-img-back").prop("class", "");
         $("#zoomin-img").prop("class", "active");
         $("#link-type").remove();
