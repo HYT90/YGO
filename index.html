@@ -371,7 +371,7 @@
       ////////////////////////////////////////TODO:攻防數值條件搜尋處理
       const ADFilterFunc = (infoList) => {
         //最大ATK, DEF為-1的話 代表最低也為-1, 因此當作攻防沒有設限直接回傳
-        if (data.ATK.max == initNum && data.DEF.max == initNum) return infoList;
+        if (data.ATK.max <= initNum && data.DEF.max <= initNum) return infoList;
         return infoList.filter((info) => {
           if (info.type !== "Link Monster")
             return (
@@ -380,11 +380,11 @@
                 info.def >= data.DEF.min &&
                 info.def <= data.DEF.max) ||
               //攻擊力沒設限時
-              (data.ATK.max == initNum &&
+              (data.ATK.max <= initNum &&
                 info.def >= data.DEF.min &&
                 info.def <= data.DEF.max) ||
               //防禦力沒設限時
-              (data.DEF.max == initNum &&
+              (data.DEF.max <= initNum &&
                 info.atk >= data.ATK.min &&
                 info.atk <= data.ATK.max)
             );
