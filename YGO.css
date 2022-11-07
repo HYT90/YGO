@@ -144,6 +144,10 @@ header div.search div button {
   display: flex;
   justify-content: space-between;
 }
+.popup .card-info #card-description h1 #card-attribute {
+  max-width: 100%;
+  height: 100%;
+}
 .popup .card-info #card-description #card-ad {
   font-size: 20px;
   height: 10%;

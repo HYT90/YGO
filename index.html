@@ -215,17 +215,18 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script>
+      let initNum = -1;
       //宣告一個全域物件, vue里的data綁定這個物件
       let data = {
         OpenFilter: false,
         default: null,
         ATK: {
-          min: 0,
-          max: 0,
+          min: initNum,
+          max: initNum,
         },
         DEF: {
-          min: 0,
-          max: 0,
+          min: initNum,
+          max: initNum,
         },
         //卡片類型 種類的Array, 添加 <select>標籤 選取
         Types: [null, "Monster Card", "Spell Card", "Trap Card"],
@@ -355,10 +356,10 @@
               Attribute: this.default,
               Race: this.default,
             };
-            this.ATK.min = 0;
-            this.ATK.max = 0;
-            this.DEF.min = 0;
-            this.DEF.max = 0;
+            this.ATK.min = initNum;
+            this.ATK.max = initNum;
+            this.DEF.min = initNum;
+            this.DEF.max = initNum;
           },
           CloseAndClearFilter(event) {
             OpenTheFilterMenu();
@@ -369,15 +370,23 @@
 
       ////////////////////////////////////////TODO:攻防數值條件搜尋處理
       const ADFilterFunc = (infoList) => {
-        //最大ATK, DEF為0的話 代表最低也為0, 因此當作攻防沒有設限
-        if (data.ATK.max == 0 && data.DEF.max == 0) return infoList;
+        //最大ATK, DEF為-1的話 代表最低也為-1, 因此當作攻防沒有設限直接回傳
+        if (data.ATK.max == initNum && data.DEF.max == initNum) return infoList;
         return infoList.filter((info) => {
           if (info.type !== "Link Monster")
             return (
-              info.atk >= data.ATK.min &&
-              info.atk <= data.ATK.max &&
-              info.def >= data.DEF.min &&
-              info.def <= data.DEF.max
+              (info.atk >= data.ATK.min &&
+                info.atk <= data.ATK.max &&
+                info.def >= data.DEF.min &&
+                info.def <= data.DEF.max) ||
+              //攻擊力沒設限時
+              (data.ATK.max == initNum &&
+                info.def >= data.DEF.min &&
+                info.def <= data.DEF.max) ||
+              //防禦力沒設限時
+              (data.DEF.max == initNum &&
+                info.atk >= data.ATK.min &&
+                info.atk <= data.ATK.max)
             );
           else return info.atk >= data.ATK.min && info.atk <= data.ATK.max;
         });
