@@ -457,8 +457,8 @@
       const KeySearch = (event) => {
         console.log(event.keyCode);
         //當onkeydown觸發時, event先判斷輸入的鍵是否為Enter鍵
-        //Enter預設會觸發submit(轉址到form標籤裡的action頁面), 所以需要先讓event執行preventDefault()擋掉submit預設的動作
         if (event.keyCode !== null && event.keyCode !== 13) return;
+        //input標籤送出預設會觸發form的submit(轉址到form標籤裡的action頁面), 所以需要先讓event執行preventDefault()擋掉submit預設的動作
         event.preventDefault();
         Search(event);
       };
@@ -467,7 +467,7 @@
         const searchName = input[0].value.trim();
         const filterApply = FilterApply();
         if (searchName === "") {
-          alert("This should be nonempty");
+          alert("Please enter a valid word");
           return;
         }
         getCardImage(url + "?fname=" + searchName + filterApply);
@@ -476,9 +476,9 @@
       //更多卡片結果
       let maxnumber = 0;
       const cardspertime = 36;
-
-      //TODO 過濾器 種族 星 魔/陷 攻/防
+      //用來檢查資料是否已載入完成, false表示前一次操作還未完成需等待
       let done = false;
+
       async function getCardImage(URL) {
         if (done) return;
         //刷新頁面
@@ -495,15 +495,18 @@
           return;
         }
 
+        //const json = await myObject.json();
+        //取得response的json字串
         let myText = await myObject.text();
+        //將json字串轉為json物件
         const json = await JSON.parse(myText);
-        //TODO:json處理 cardInfo為已搜尋完的結果(全部)
+        //json物件的data屬性為一Array 此Array的元素為卡片的查詢結果
         TMPcardInfo = json.data;
         console.log(TMPcardInfo);
 
-        ////////////////////////////////////////////TODO: 攻防數值條件處理
+        ////////////////////////////////////////////攻防數值條件處理
         cardInfo = ADFilterFunc(TMPcardInfo);
-        console.log(cardInfo);
+        //console.log(cardInfo);
         if (cardInfo.length == 0) {
           done = false;
           alert("沒有符合條件的結果");
