@@ -41,6 +41,7 @@ header div.search div {
   align-items: center;
   padding-bottom: 2px;
   margin-left: 10px;
+  flex-wrap: wrap;
 }
 
 header div.search div button {
@@ -340,11 +341,5 @@ header div.search div button {
     height: auto;
     padding: 0;
     margin: 5px 0;
-  }
-}
-
-@media (max-width: 360px) {
-  header div.search div {
-    flex-wrap: wrap;
   }
 }
