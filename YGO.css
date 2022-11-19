@@ -346,5 +346,6 @@ header div.search div button {
 @media (max-width: 360px) {
   header div.search div {
     display: block;
+    margin: 0;
   }
 }
