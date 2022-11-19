@@ -343,3 +343,9 @@ header div.search div button {
     margin: 5px 0;
   }
 }
+
+@media (max-width: 355px) {
+  #section-vue {
+    top: 90px;
+  }
+}
