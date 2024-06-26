@@ -507,31 +507,40 @@
         TMPcardInfo = json.data;
         console.log(TMPcardInfo);
 
+        /***************************************REMOVE
         // Convert JSON data to CSV format
-        const replacer = (key, value) => (value === null ? "" : value);
-        const header = Object.keys(TMPcardInfo[0]); //傳回資料的key(資料表的column)
-        //執行映射map, row為json.data的每筆資料物件, 將row["key"]的value轉成字串並以方法replacer處理, 每個value間插入','
-        let csv = TMPcardInfo.map((row) =>
-          header
-            .map((fieldName) => JSON.stringify(row[fieldName], replacer))
-            .join(",")
-        );
+        // const replacer = (key, value) => (value === null ? "" : value);
+        // const header = Object.keys(TMPcardInfo[0]); //傳回資料的key(資料表的column)
+        // //執行映射map, row為json.data的每筆資料物件, 將row["key"]的value轉成字串並以方法replacer處理, 每個value間插入','
+        // let csv = TMPcardInfo.map((row) =>
+        //   header
+        //     .map((fieldName) => JSON.stringify(row[fieldName], replacer))
+        //     .join(",")
+        // );
 
-        // array.join()會傳回一字串內容為每個元素的字串並在之間插入',' 如 [1,2,3].join('-') 會傳回 "1-2-3"
-        // array.unshift(元素)會執行將元素插入到array的最前面 如 [1,2,3].unshift(4,5,6) 會傳回 [4,5,6,1,2,3]
-        csv.unshift(header.join(","));
-        //將符合csv格式的 array 轉成字串並join \n(換行)
-        csv = csv.join("\r\n");
+        // // array.join()會傳回一字串內容為每個元素的字串並在之間插入',' 如 [1,2,3].join('-') 會傳回 "1-2-3"
+        // // array.unshift(元素)會執行將元素插入到array的最前面 如 [1,2,3].unshift(4,5,6) 會傳回 [4,5,6,1,2,3]
+        // csv.unshift(header.join(","));
+        // //將符合csv格式的 array 轉成字串並join \n(換行)
+        // csv = csv.join("\r\n");
 
         // Create a downloadable file
-        const blob = new Blob([csv], { type: "text/csv" });
-        const url = URL.createObjectURL(blob);
+        // const blob = new Blob([csv], { type: "text/csv" });
+        // //const url = URL.createObjectURL(blob);
+        // const dataURL = `data:${blob.type};base64,${btoa(
+        //   unescape(encodeURIComponent(csv))
+        // )}`;
+        const blob = new Blob([myText], { type: "text/plain" });
+        const dataURL = `data:${blob.type};base64,${btoa(
+          decodeURIComponent(encodeURIComponent(myText))
+        )}`;
         const link = document.createElement("a");
-        link.href = url;
-        link.download = "ygoData.csv";
+        link.href = dataURL;
+        link.download = "ygoData.txt";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+****************************************************/
 
         ////////////////////////////////////////////攻防數值條件處理
         cardInfo = ADFilterFunc(TMPcardInfo);
