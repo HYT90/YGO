@@ -408,7 +408,7 @@
         // return infoList;
       };
 
-      //開啟條件搜尋清單
+      //開啟/關閉 條件搜尋清單
       const OpenTheFilterMenu = () => {
         data.OpenFilter = !data.OpenFilter;
       };
@@ -449,6 +449,7 @@
         "https://ygoprodeck.com/wp-content/uploads/2017/01/level.png";
 
       //TODO:API的response結果 寫一個Objlist存response的資料 可以用#overview中的image id來找卡片的資訊
+      //也許可以使用 cache 暫存資料
       let cardInfo = [];
 
       //遊戲王API url
@@ -456,7 +457,7 @@
 
       const KeySearch = (event) => {
         console.log(event.keyCode);
-        //當onkeydown觸發時, event先判斷輸入的鍵是否為Enter鍵
+        //當onkeydown觸發時, event先判斷輸入的鍵是否為Enter鍵(keyCode為13)
         if (event.keyCode !== null && event.keyCode !== 13) return;
         //input標籤送出預設會觸發form的submit(轉址到form標籤裡的action頁面), 所以需要先讓event執行preventDefault()擋掉submit預設的動作
         event.preventDefault();
@@ -498,11 +499,39 @@
         //const json = await myObject.json();
         //取得response的json字串
         let myText = await myObject.text();
+        console.log(myText);
         //將json字串轉為json物件
         const json = await JSON.parse(myText);
+        console.log(json);
         //json物件的data屬性為一Array 此Array的元素為卡片的查詢結果
         TMPcardInfo = json.data;
         console.log(TMPcardInfo);
+
+        // Convert JSON data to CSV format
+        const replacer = (key, value) => (value === null ? "" : value);
+        const header = Object.keys(TMPcardInfo[0]); //傳回資料的key(資料表的column)
+        //執行映射map, row為json.data的每筆資料物件, 將row["key"]的value轉成字串並以方法replacer處理, 每個value間插入','
+        let csv = TMPcardInfo.map((row) =>
+          header
+            .map((fieldName) => JSON.stringify(row[fieldName], replacer))
+            .join(",")
+        );
+
+        // array.join()會傳回一字串內容為每個元素的字串並在之間插入',' 如 [1,2,3].join('-') 會傳回 "1-2-3"
+        // array.unshift(元素)會執行將元素插入到array的最前面 如 [1,2,3].unshift(4,5,6) 會傳回 [4,5,6,1,2,3]
+        csv.unshift(header.join(","));
+        //將符合csv格式的 array 轉成字串並join \n(換行)
+        csv = csv.join("\r\n");
+
+        // Create a downloadable file
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "ygoData.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
         ////////////////////////////////////////////攻防數值條件處理
         cardInfo = ADFilterFunc(TMPcardInfo);
